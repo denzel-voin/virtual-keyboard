@@ -341,7 +341,6 @@ document.addEventListener('keydown', (event) => {
 });
 document.addEventListener('keyup', (event) => {
   const key = event.key;
-  // Обрабатываем клавиши shift, ctrl и alt
   if (key === 'Shift' || key === 'Alt' || key === 'Backspace' || key === 'Tab' || key === 'Enter') {
     const keyElement = document.querySelector(`.key[data-key='${key}']`);
     keyElement.classList.remove('active');
@@ -368,16 +367,12 @@ document.addEventListener('keyup', (event) => {
 document.addEventListener('keydown', (event) => {
   const key = event.key.toLowerCase();
   const virtualKey = document.querySelector(`button[data-key="${key}"]`);
-  if (virtualKey) {
-  virtualKey.classList.add('active');
-  }
+  if (virtualKey) virtualKey.classList.add('active');
   if (key === 'backspace') {
   const currentValue = input.value;
   input.value = currentValue.substring(0, currentValue.length - 1);
   }
-  if (key === 'shift') {
-  shiftPressed = true;
-  }
+  if (key === 'shift') shiftPressed = true;
   if (event.key === 'Delete') {
     const start = input.selectionStart;
     const end = input.selectionEnd;
@@ -396,10 +391,10 @@ document.addEventListener('keydown', (event) => {
   const key = event.key.toLowerCase();
   const virtualKey = document.querySelector(`button[data-key="${key}"]`);
   if (virtualKey) {
-  virtualKey.classList.remove('active');
+    virtualKey.classList.remove('active');
   }
   if (key === 'shift') {
-  shiftPressed = false;
+    shiftPressed = false;
   }
   });
   
@@ -407,7 +402,7 @@ document.addEventListener('keydown', (event) => {
   const key = event.key.toLowerCase();
   const virtualKey = document.querySelector(`button[data-key="${key}"]`);
   if (virtualKey) {
-  virtualKey.dispatchEvent(new MouseEvent('mousedown'));
+    virtualKey.dispatchEvent(new MouseEvent('mousedown'));
   }
   });
   
@@ -415,7 +410,7 @@ document.addEventListener('keydown', (event) => {
   const key = event.key.toLowerCase();
   const virtualKey = document.querySelector(`button[data-key="${key}"]`);
   if (virtualKey) {
-  virtualKey.dispatchEvent(new MouseEvent('mouseup'));
+    virtualKey.dispatchEvent(new MouseEvent('mouseup'));
   }
   });
 });

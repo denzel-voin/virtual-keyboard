@@ -62,3 +62,113 @@ const keys = [
   ['►', '►', 'ArrowRight', 'ArrowRight'],
   ['Ctrl', 'Ctrl', 'ControlLeft', 'ControlLeft'],
   ];
+
+document.addEventListener('DOMContentLoaded', () => {
+  const title = document.createElement('h1');
+  title.innerText = 'This keyboard was created on Windows. \n To switch the language, press left shift + alt';
+  document.body.append(title);
+  const input = document.createElement('textarea');
+  input.type = 'text';
+  input.id = 'text';
+  document.body.appendChild(input);
+  input.focus();
+  input.addEventListener('blur', function() {
+    setTimeout(() => input.focus(), 0);
+  });
+  
+  input.addEventListener('keydown', function(event) {
+    event.preventDefault();
+    if (event.key === 'Enter') {
+      const start = this.selectionStart;
+      this.value = this.value.slice(0, start) + '\n' + this.value.slice(this.selectionEnd);
+      this.selectionEnd = start + 1;
+    }
+  });
+  
+  const keyboard = document.createElement('div');
+  keyboard.id = 'keyboard';
+  document.body.appendChild(keyboard);
+  
+  let shiftPressed = false;
+  let altPressed = false;
+  let capsPressed = false;
+  let capsLockOn = false;
+  let lang = 0;
+  
+  keys.forEach((key) => {
+    const keyElement = document.createElement('button');
+    keyElement.innerHTML = key[lang];
+    keyElement.classList.add('key');
+    keyElement.dataset.key = key[lang];
+    keyElement.addEventListener('mousedown', (event) => {
+    const key = event.target.dataset.key;
+    event.preventDefault();
+    if (key === 'Backspace') {
+      input.value = input.value.slice(0, -1);
+    } else if (key === 'Enter') {
+      const start = input.selectionStart;
+      input.value = input.value.slice(0, start) + '\n' + input.value.slice(input.selectionEnd);
+      input.selectionEnd = start + 1;
+    } else if (key === 'Shift') {
+      shiftPressed = true;
+    } else if (key === 'Alt') {
+      altPressed = true;
+      if (shiftPressed) {
+        lang = 1 - lang;
+        keys.forEach((key, i) => {
+          const keyElement = document.querySelectorAll('.key')[i];
+          keyElement.innerHTML = key[lang];
+          keyElement.dataset.key = key[lang];
+        });
+      }
+    } else if (key === 'Caps Lock') {
+      capsLockOn = !capsLockOn;
+      const langIndex = lang;
+      const upperCase = capsLockOn;
+      if (capsLockOn) keyElement.classList.add('active');
+      if (!capsLockOn) keyElement.classList.remove('active');
+      keys.forEach((key, i) => {
+        const keyElement = document.querySelectorAll('.key')[i];
+        keyElement.innerHTML = upperCase ? key[langIndex].toUpperCase() : key[langIndex].toLowerCase();
+        keyElement.dataset.key = key[langIndex];
+      });
+    } else if (key === 'Tab') {
+      event.preventDefault();
+      const start = input.selectionStart;
+      const end = input.selectionEnd;
+      input.value = input.value.slice(0, start) + '  ' + input.value.slice(end);
+      input.selectionStart = input.selectionEnd = start + 2;
+    } else if (key === 'Ctrl') {
+      ctrlPressed = true;
+    } else if (key === 'Del') {
+      deleteSelectionOrCharacter();
+    } else {
+      const letter = (capsLockOn || shiftPressed) ? key.toUpperCase() : key.toLowerCase();
+      input.value += letter;
+    } 
+  });
+
+  function deleteSelectionOrCharacter() {
+    const start = input.selectionStart;
+    const end = input.selectionEnd;
+    if (start === end) {
+      input.value = input.value.slice(0, start) + input.value.slice(start + 1);
+      input.selectionStart = input.selectionEnd = start;
+    } else {
+      input.value = input.value.slice(0, start) + input.value.slice(end);
+      input.selectionStart = input.selectionEnd = start;
+    }
+  }
+
+  keyElement.addEventListener('mouseup', (event) => {
+    const key = event.target.dataset.key;
+    if (key === 'Shift') {
+      shiftPressed = false;
+    } else if (key === 'Alt') {
+      altPressed = false;
+    }
+  });
+
+  keyboard.appendChild(keyElement);
+});
+});

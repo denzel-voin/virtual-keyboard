@@ -339,4 +339,30 @@ document.addEventListener('keydown', (event) => {
     keyElement.classList.add('active');
   }
 });
+document.addEventListener('keyup', (event) => {
+  const key = event.key;
+  // Обрабатываем клавиши shift, ctrl и alt
+  if (key === 'Shift' || key === 'Alt' || key === 'Backspace' || key === 'Tab' || key === 'Enter') {
+    const keyElement = document.querySelector(`.key[data-key='${key}']`);
+    keyElement.classList.remove('active');
+  } else if (key === 'Control') {
+    const keyElement = document.querySelector(`.key[data-key='Ctrl']`);
+    keyElement.classList.remove('active');
+  } else if (key === 'ArrowLeft') {
+    const keyElement = document.querySelector(`.key[data-key='◄']`);
+    keyElement.classList.remove('active');
+  } else if (key === 'ArrowRight') {
+    const keyElement = document.querySelector(`.key[data-key='►']`);
+    keyElement.classList.remove('active');
+  } else if (key === 'ArrowUp') {
+    const keyElement = document.querySelector(`.key[data-key='▲']`);
+    keyElement.classList.remove('active');
+  } else if (key === 'ArrowDown') {
+    const keyElement = document.querySelector(`.key[data-key='▼']`);
+    keyElement.classList.remove('active');
+  } else if (key === 'Delete') {
+    const keyElement = document.querySelector(`.key[data-key='Del']`);
+    keyElement.classList.remove('active');
+  }
+});
 });

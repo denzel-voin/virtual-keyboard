@@ -171,4 +171,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
   keyboard.appendChild(keyElement);
 });
+
+input.addEventListener('keydown', (event) => {
+  if (event.key === 'ArrowLeft') {
+    event.preventDefault();
+    if (input.selectionStart > 0) {
+      input.selectionStart -= 1;
+      input.selectionEnd = input.selectionStart;
+    }
+  } else if (event.key === 'ArrowRight') {
+    event.preventDefault();
+    if (input.selectionEnd < input.value.length) {
+      input.selectionEnd += 1;
+      input.selectionStart = input.selectionEnd;
+    }
+  } else if (event.key === 'ArrowUp') {
+    event.preventDefault();
+    const prevLineIndex = input.value.lastIndexOf('\n', input.selectionStart - 1);
+    if (prevLineIndex !== -1) {
+      input.selectionEnd = prevLineIndex;
+      const currLineOffset = input.selectionStart - prevLineIndex;
+      input.selectionStart = prevLineIndex + Math.min(currLineOffset, input.value.length - prevLineIndex - 1);
+    } else {
+      input.selectionEnd = 0;
+      input.selectionStart = 0;
+    }
+  } else if (event.key === 'ArrowDown') {
+    event.preventDefault();
+    const nextLineIndex = input.value.indexOf('\n', input.selectionEnd);
+    if (nextLineIndex !== -1) {
+      input.selectionStart = nextLineIndex + 1;
+      const currLineOffset = input.selectionEnd - (input.value.lastIndexOf('\n', input.selectionEnd - 1) + 1);
+      input.selectionEnd = input.selectionStart + Math.min(currLineOffset, input.value.length - input.selectionStart);
+    } else {
+      input.selectionEnd = input.value.length;
+      input.selectionStart = input.selectionEnd;
+    }
+  }
+});
+
 });

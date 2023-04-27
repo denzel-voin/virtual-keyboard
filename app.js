@@ -209,5 +209,52 @@ input.addEventListener('keydown', (event) => {
     }
   }
 });
-
+document.addEventListener('keydown', (event) => {
+  if (event.code === 'ShiftLeft') {
+    shiftPressed = true;
+    updateKeys();
+  } else if (event.code === 'AltLeft') {
+    altPressed = true;
+    if (shiftPressed) {
+      lang = 1 - lang;
+      updateKeys();
+    }
+  } else if (event.key === 'Tab') {
+    event.preventDefault();
+    const start = input.selectionStart;
+    const end = input.selectionEnd;
+    const spaces = ' '.repeat(2);
+    input.value = input.value.substring(0, start) + spaces + input.value.substring(end);
+    input.selectionStart = input.selectionEnd = start + spaces.length;
+  } if (event.key === 'CapsLock') {
+    const keyValue = event.key;
+    capsPressed = !capsPressed;
+    updateKeys();
+    if (keyValue === 'CapsLock') {
+      capsLockOn = !capsLockOn;
+      const langIndex = lang;
+      const upperCase = (capsLockOn && !shiftPressed) || (!capsLockOn && shiftPressed);
+      keys.forEach((key, i) => {
+        const keyElement = document.querySelectorAll('.key')[i];
+        keyElement.innerHTML = upperCase ? key[langIndex].toUpperCase() : key[langIndex].toLowerCase();
+        keyElement.dataset.key = key[langIndex];
+      });
+    } else {
+      const letter = (capsLockOn || shiftPressed) ? keyValue.toUpperCase() : keyValue.toLowerCase();
+      input.value += letter;
+    }
+  }     
+   else {
+    const start = input.selectionStart;
+    const end = input.selectionEnd;
+    let value = input.value;
+    const key = event.key;
+     if (key === 'Tab') {
+      event.preventDefault();
+      const spaces = '  ';
+      input.value = value.substring(0, start) + spaces + value.substring(end);
+      input.selectionStart = input.selectionEnd = start + spaces.length;
+    }
+  }
+});
 });

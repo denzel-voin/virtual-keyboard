@@ -257,4 +257,86 @@ document.addEventListener('keydown', (event) => {
     }
   }
 });
+document.addEventListener('keyup', (event) => {
+  if (event.code === 'ShiftLeft') {
+    shiftPressed = false;
+    updateKeys();
+  } else if (event.code === 'AltLeft') {
+    altPressed = false;
+    updateKeys();
+  }
+});
+
+function updateKeys() {
+  const keyElements = document.querySelectorAll('.key');
+  keyElements.forEach((keyElement, i) => {
+    const key = keys[i][lang];
+    if (capsPressed) {
+      keyElement.innerHTML = shiftPressed ? key.toLowerCase() : key.toUpperCase();
+    } else {
+      keyElement.innerHTML = shiftPressed ? key.toUpperCase() : key.toLowerCase();
+    }
+    keyElement.dataset.key = key;
+  });
+}
+
+let isCapsLockOn = false;
+
+document.addEventListener('keydown', (event) => {
+const key = event.key;
+if (key === 'CapsLock') {
+  isCapsLockOn = !isCapsLockOn;
+} 
+});
+
+document.addEventListener('keyup', (event) => {
+const key = event.key;
+const keyElement = document.querySelector(`.key[data-key='Caps Lock']`);
+if (key === 'CapsLock' && isCapsLockOn) {
+  keyElement.classList.add('active');
+} else if (key === 'CapsLock' && !isCapsLockOn) {
+  keyElement.classList.remove('active');
+}
+});
+
+document.addEventListener('keydown', (event) => {
+  const key = event.key;
+  if (key === 'Shift' || key === 'Alt' || key === 'Enter') {
+    event.preventDefault();
+    const keyElement = document.querySelector(`.key[data-key='${key}']`);
+    keyElement.classList.add('active');
+  }
+  
+  if (key === 'Delete') {
+    event.preventDefault();
+    const keyElement = document.querySelector(`.key[data-key='Del']`);
+    keyElement.classList.add('active');
+  }
+
+  if (key === 'Backspace' || key === 'Tab') {
+    event.preventDefault();
+    const keyElement = document.querySelector(`.key[data-key='${key}']`);
+    keyElement.classList.add('active');
+  } else if (key === 'Control') {
+    event.preventDefault();
+    const keyElement = document.querySelector(`.key[data-key='Ctrl']`);
+    keyElement.classList.add('active');
+  } else if (key === 'ArrowLeft') {
+    event.preventDefault();
+    const keyElement = document.querySelector(`.key[data-key='◄']`);
+    keyElement.classList.add('active');
+  } else if (key === 'ArrowRight') {
+    event.preventDefault();
+    const keyElement = document.querySelector(`.key[data-key='►']`);
+    keyElement.classList.add('active');
+  } else if (key === 'ArrowUp') {
+    event.preventDefault();
+    const keyElement = document.querySelector(`.key[data-key='▲']`);
+    keyElement.classList.add('active');
+  } else if (key === 'ArrowDown') {
+    event.preventDefault();
+    const keyElement = document.querySelector(`.key[data-key='▼']`);
+    keyElement.classList.add('active');
+  }
+});
 });

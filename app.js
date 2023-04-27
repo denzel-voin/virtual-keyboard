@@ -365,4 +365,57 @@ document.addEventListener('keyup', (event) => {
     keyElement.classList.remove('active');
   }
 });
+document.addEventListener('keydown', (event) => {
+  const key = event.key.toLowerCase();
+  const virtualKey = document.querySelector(`button[data-key="${key}"]`);
+  if (virtualKey) {
+  virtualKey.classList.add('active');
+  }
+  if (key === 'backspace') {
+  const currentValue = input.value;
+  input.value = currentValue.substring(0, currentValue.length - 1);
+  }
+  if (key === 'shift') {
+  shiftPressed = true;
+  }
+  if (event.key === 'Delete') {
+    const start = input.selectionStart;
+    const end = input.selectionEnd;
+    let value = input.value;
+    if (start === end) {
+      value = value.substring(0, start) + value.substring(start + 1);
+    } else {
+      value = value.substring(0, start) + value.substring(end);
+    }
+    input.value = value;
+    input.selectionStart = input.selectionEnd = start;
+  }
+  });
+  
+  document.addEventListener('keyup', (event) => {
+  const key = event.key.toLowerCase();
+  const virtualKey = document.querySelector(`button[data-key="${key}"]`);
+  if (virtualKey) {
+  virtualKey.classList.remove('active');
+  }
+  if (key === 'shift') {
+  shiftPressed = false;
+  }
+  });
+  
+  window.addEventListener('keyup', (event) => {
+  const key = event.key.toLowerCase();
+  const virtualKey = document.querySelector(`button[data-key="${key}"]`);
+  if (virtualKey) {
+  virtualKey.dispatchEvent(new MouseEvent('mousedown'));
+  }
+  });
+  
+  window.addEventListener('keydown', (event) => {
+  const key = event.key.toLowerCase();
+  const virtualKey = document.querySelector(`button[data-key="${key}"]`);
+  if (virtualKey) {
+  virtualKey.dispatchEvent(new MouseEvent('mouseup'));
+  }
+  });
 });

@@ -100,11 +100,60 @@ document.addEventListener('DOMContentLoaded', () => {
     keyElement.innerHTML = key[lang];
     keyElement.classList.add('key');
     keyElement.dataset.key = key[lang];
+    keyElement.addEventListener('click', (event) => {
+      const key = event.target.dataset.key;
+      event.preventDefault();
+      const textareaValue = input.value;
+      const textareaSelectionStart = input.selectionStart;
+      if (key === '◄') {
+        if (textareaSelectionStart > 0) {
+          input.selectionStart -= 1;
+          input.selectionEnd = input.selectionStart;
+        }
+      } else if (key === '►') {
+        if (textareaSelectionStart < textareaValue.length) {
+          input.selectionStart += 1;
+          input.selectionEnd = input.selectionStart;
+        }
+      } else if (key === '▲') {
+        const lines = textareaValue.split('\n');
+        const currentLineIndex = textareaValue.substr(0, textareaSelectionStart).split('\n').length - 1;
+        const currentLine = lines[currentLineIndex];
+        const prevLineIndex = textareaSelectionStart - currentLine.length - currentLineIndex;
+        if (prevLineIndex !== -1) {
+          const currLineStart = input.value.lastIndexOf('\n', input.selectionStart - 1) + 1;
+          const currLineOffset = input.selectionStart - currLineStart;
+          const prevLineStart = input.value.lastIndexOf('\n', prevLineIndex - 1) + 1;
+          input.selectionStart = prevLineStart + Math.min(currLineOffset, input.value.length - prevLineStart - 1);
+          input.selectionEnd = input.selectionStart;
+        }
+      } else if (key === '▼') {
+        const lines = textareaValue.split('\n');
+        const currentLineIndex = textareaValue.substr(0, textareaSelectionStart).split('\n').length - 1;
+        const currentLine = lines[currentLineIndex];
+        const currentLineEnd = textareaValue.indexOf(currentLine) + currentLine.length;
+        const nextLineStart = textareaValue.indexOf('\n', currentLineEnd) + 1;
+        if (nextLineStart !== 0 && nextLineStart <= textareaValue.length) {
+          const currLineStart = input.value.lastIndexOf('\n', input.selectionStart + 1) + 1;
+          const currLineOffset = input.selectionStart - currLineStart;
+          input.selectionStart = nextLineStart + Math.min(currLineOffset, textareaValue.length - nextLineStart);
+          input.selectionEnd = input.selectionStart;
+        }
+      }
+    })
     keyElement.addEventListener('mousedown', (event) => {
     const key = event.target.dataset.key;
+    if (key.includes('◄') || key.includes('►') || key.includes('▲') || key.includes('▼')) {
+      return;
+    }
     event.preventDefault();
     if (key === 'Backspace') {
-      input.value = input.value.slice(0, -1);
+      const cursorPos = input.selectionStart;
+      if (cursorPos > 0) {
+        input.value = input.value.slice(0, cursorPos - 1) + input.value.slice(cursorPos);
+        input.selectionStart = cursorPos - 1;
+        input.selectionEnd = cursorPos - 1;
+      }
     } else if (key === 'Enter') {
       const start = input.selectionStart;
       input.value = input.value.slice(0, start) + '\n' + input.value.slice(input.selectionEnd);
@@ -173,6 +222,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 input.addEventListener('keydown', (event) => {
+  const textareaValue = input.value;
+  const textareaSelectionStart = input.selectionStart;
   if (event.key === 'ArrowLeft') {
     event.preventDefault();
     if (input.selectionStart > 0) {
@@ -187,25 +238,28 @@ input.addEventListener('keydown', (event) => {
     }
   } else if (event.key === 'ArrowUp') {
     event.preventDefault();
-    const prevLineIndex = input.value.lastIndexOf('\n', input.selectionStart - 1);
+    const lines = textareaValue.split('\n');
+    const currentLineIndex = textareaValue.substr(0, textareaSelectionStart).split('\n').length - 1;
+    const currentLine = lines[currentLineIndex];
+    const prevLineIndex = textareaSelectionStart - currentLine.length - currentLineIndex;
     if (prevLineIndex !== -1) {
-      input.selectionEnd = prevLineIndex;
-      const currLineOffset = input.selectionStart - prevLineIndex;
-      input.selectionStart = prevLineIndex + Math.min(currLineOffset, input.value.length - prevLineIndex - 1);
-    } else {
-      input.selectionEnd = 0;
-      input.selectionStart = 0;
+      const currLineStart = input.value.lastIndexOf('\n', input.selectionStart - 1) + 1;
+      const currLineOffset = input.selectionStart - currLineStart;
+      const prevLineStart = input.value.lastIndexOf('\n', prevLineIndex - 1) + 1;
+      input.selectionStart = prevLineStart + Math.min(currLineOffset, input.value.length - prevLineStart - 1);
+      input.selectionEnd = input.selectionStart;
     }
   } else if (event.key === 'ArrowDown') {
-    event.preventDefault();
-    const nextLineIndex = input.value.indexOf('\n', input.selectionEnd);
-    if (nextLineIndex !== -1) {
-      input.selectionStart = nextLineIndex + 1;
-      const currLineOffset = input.selectionEnd - (input.value.lastIndexOf('\n', input.selectionEnd - 1) + 1);
-      input.selectionEnd = input.selectionStart + Math.min(currLineOffset, input.value.length - input.selectionStart);
-    } else {
-      input.selectionEnd = input.value.length;
-      input.selectionStart = input.selectionEnd;
+    const lines = textareaValue.split('\n');
+    const currentLineIndex = textareaValue.substr(0, textareaSelectionStart).split('\n').length - 1;
+    const currentLine = lines[currentLineIndex];
+    const currentLineEnd = textareaValue.indexOf(currentLine) + currentLine.length;
+    const nextLineStart = textareaValue.indexOf('\n', currentLineEnd) + 1;
+    if (nextLineStart !== 0 && nextLineStart <= textareaValue.length) {
+      const currLineStart = input.value.lastIndexOf('\n', input.selectionStart + 1) + 1;
+      const currLineOffset = input.selectionStart - currLineStart;
+      input.selectionStart = nextLineStart + Math.min(currLineOffset, textareaValue.length - nextLineStart);
+      input.selectionEnd = input.selectionStart;
     }
   }
 });
@@ -369,8 +423,12 @@ document.addEventListener('keydown', (event) => {
   const virtualKey = document.querySelector(`button[data-key="${key}"]`);
   if (virtualKey) virtualKey.classList.add('active');
   if (key === 'backspace') {
-  const currentValue = input.value;
-  input.value = currentValue.substring(0, currentValue.length - 1);
+    const cursorPos = input.selectionStart;
+    if (cursorPos > 0) {
+      input.value = input.value.slice(0, cursorPos - 1) + input.value.slice(cursorPos);
+      input.selectionStart = cursorPos - 1;
+      input.selectionEnd = cursorPos - 1;
+    }
   }
   if (key === 'shift') shiftPressed = true;
   if (event.key === 'Delete') {

@@ -353,6 +353,77 @@ if (key === 'CapsLock' && isCapsLockOn) {
 }
 });
 
+document.addEventListener('mousedown', (event) => {
+  const key = event.target.dataset.key;
+  const virtualKey = document.querySelector(`button[data-key="${key}"]`);
+  if (virtualKey) virtualKey.classList.add('active');
+  if (key === 'Shift' || key === 'Alt' || key === 'Enter') {
+    event.preventDefault();
+    const keyElement = document.querySelector(`.key[data-key='${key}']`);
+    keyElement.classList.add('active');
+  }
+  
+  if (key === 'Delete') {
+    event.preventDefault();
+    const keyElement = document.querySelector(`.key[data-key='Del']`);
+    keyElement.classList.add('active');
+  }
+
+  if (key === 'Backspace' || key === 'Tab') {
+    event.preventDefault();
+    const keyElement = document.querySelector(`.key[data-key='${key}']`);
+    keyElement.classList.add('active');
+  } else if (key === 'Control') {
+    event.preventDefault();
+    const keyElement = document.querySelector(`.key[data-key='Ctrl']`);
+    keyElement.classList.add('active');
+  } else if (key === 'ArrowLeft') {
+    event.preventDefault();
+    const keyElement = document.querySelector(`.key[data-key='◄']`);
+    keyElement.classList.add('active');
+  } else if (key === 'ArrowRight') {
+    event.preventDefault();
+    const keyElement = document.querySelector(`.key[data-key='►']`);
+    keyElement.classList.add('active');
+  } else if (key === 'ArrowUp') {
+    event.preventDefault();
+    const keyElement = document.querySelector(`.key[data-key='▲']`);
+    keyElement.classList.add('active');
+  } else if (key === 'ArrowDown') {
+    event.preventDefault();
+    const keyElement = document.querySelector(`.key[data-key='▼']`);
+    keyElement.classList.add('active');
+  }
+});
+
+document.addEventListener('mouseup', (event) => {
+  const key = event.target.dataset.key;
+  const virtualKey = document.querySelector(`button[data-key="${key}"]`);
+  if (virtualKey) virtualKey.classList.remove('active');
+  if (key === 'Shift' || key === 'Alt' || key === 'Backspace' || key === 'Tab' || key === 'Enter') {
+    const keyElement = document.querySelector(`.key[data-key='${key}']`);
+    keyElement.classList.remove('active');
+  } else if (key === 'Control') {
+    const keyElement = document.querySelector(`.key[data-key='Ctrl']`);
+    keyElement.classList.remove('active');
+  } else if (key === 'ArrowLeft') {
+    const keyElement = document.querySelector(`.key[data-key='◄']`);
+    keyElement.classList.remove('active');
+  } else if (key === 'ArrowRight') {
+    const keyElement = document.querySelector(`.key[data-key='►']`);
+    keyElement.classList.remove('active');
+  } else if (key === 'ArrowUp') {
+    const keyElement = document.querySelector(`.key[data-key='▲']`);
+    keyElement.classList.remove('active');
+  } else if (key === 'ArrowDown') {
+    const keyElement = document.querySelector(`.key[data-key='▼']`);
+    keyElement.classList.remove('active');
+  } else if (key === 'Delete') {
+    const keyElement = document.querySelector(`.key[data-key='Del']`);
+    keyElement.classList.remove('active');
+  }
+});
+
 document.addEventListener('keydown', (event) => {
   const key = event.key;
   if (key === 'Shift' || key === 'Alt' || key === 'Enter') {

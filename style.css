@@ -67,6 +67,7 @@ html {
 .key.active {
   background-color: #1b1a1a;
   color: #ddd;
+  border-radius: 20px;
 }
 
 #text {

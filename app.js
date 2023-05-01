@@ -93,8 +93,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let altPressed = false;
   let capsPressed = false;
   let capsLockOn = false;
-  let lang = 0;
-  
+  let lang = localStorage.getItem('keyboardLang') ? Number(localStorage.getItem('keyboardLang')) : 0;
+
   keys.forEach((key) => {
     const keyElement = document.createElement('button');
     keyElement.innerHTML = key[lang];
@@ -168,6 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const keyElement = document.querySelectorAll('.key')[i];
           keyElement.innerHTML = key[lang];
           keyElement.dataset.key = key[lang];
+          localStorage.setItem('keyboardLang', lang);
         });
       }
     } else if (key === 'Caps Lock') {
@@ -272,6 +273,7 @@ document.addEventListener('keydown', (event) => {
     if (shiftPressed) {
       lang = 1 - lang;
       updateKeys();
+      localStorage.setItem('keyboardLang', lang);
     }
   } else if (event.key === 'Tab') {
     event.preventDefault();

@@ -1,15 +1,20 @@
 module.exports = {
-    "env": {
-        "browser": true,
-        "es2021": true
+  env: {
+    browser: true,
+        "es2021": true,
     },
-    "extends": "eslint:recommended",
+    "extends": {
+        "airbnb" : true,
+        "stylelint-config-prettier": true,
+    },
     "overrides": [
     ],
     "parserOptions": {
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
-    "rules": {
+    rules: {
+        "semi": ["error", "never"],
+        "object-curly-newline": ["error", "always"],
     }
 }

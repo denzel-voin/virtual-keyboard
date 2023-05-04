@@ -4,6 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "stylelint-check": "stylelint-config-prettier-check",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,6 +18,9 @@
   },
   "homepage": "https://github.com/denzel-voin/virtual-keyboard#readme",
   "devDependencies": {
-    "eslint": "^8.39.0"
+    "eslint": "^8.39.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "prettier": "2.8.8",
+    "stylelint-config-prettier": "^9.0.5"
   }
 }

@@ -1,0 +1,11 @@
+{
+  "overrides": [
+    {
+      "files": ["*.js", "*.jsx", "*.ts", "*.tsx"],
+      "options": {
+        "parser": "babel"
+      }
+    }
+  ],
+  "extends": ["eslint-config-prettier"]
+}

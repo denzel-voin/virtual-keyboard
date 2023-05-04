@@ -1,6 +1,6 @@
 html {
-  font-family: 'Source Code Pro';
-  background-color:#b7a9a9;
+  font-family: "Source Code Pro";
+  background-color: #b7a9a9;
 }
 
 #keyboard {
@@ -17,11 +17,11 @@ html {
   height: 250px;
   max-width: 100%;
   box-sizing: border-box;
-  font-family: 'Source Code Pro';
+  font-family: "Source Code Pro";
 }
 
 .key {
-  font-family: 'Source Code Pro';
+  font-family: "Source Code Pro";
   font-size: 1.2em;
   font-weight: bold;
   text-align: center;
@@ -71,7 +71,7 @@ html {
 }
 
 #text {
-  font-family: 'VT323';
+  font-family: "VT323";
   display: block;
   margin: 0 auto;
   width: 850px;
@@ -86,7 +86,7 @@ html {
   font-weight: bold;
   pointer-events: none;
   background-color: #050505;
-  color: #0FD304;
+  color: #0fd304;
 }
 
 h1 {
